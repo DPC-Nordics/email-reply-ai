@@ -30,13 +30,7 @@ export default function App() {
         )}
       >
         <Header />
-        <main
-          className={clsx(
-            "flex flex-wrap gap-4 items-start justify-center w-full"
-          )}
-        >
-          <Outlet />
-        </main>
+        <Outlet />
         <ScrollRestoration />
         <LiveReload />
         <Scripts />
