@@ -1,5 +1,4 @@
 import FormField from "~/components/FormField";
-import { langs } from "~/utils/langs";
 
 export default function PasswordInput({
   id,
