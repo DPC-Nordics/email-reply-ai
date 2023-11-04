@@ -1,41 +1,21 @@
-import type { MetaFunction } from "@remix-run/node";
+import { type ActionFunctionArgs } from "@remix-run/node";
+import Card from "~/components/Card";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
-};
+export async function loader() {
+  return null;
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  return null;
+}
+
+export type IndexAction = typeof action;
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <>
+      <Card className="flex-1">{}</Card>
+      <Card className="flex-1">{}</Card>
+    </>
   );
 }
