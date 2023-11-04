@@ -9,8 +9,8 @@ export default function LanguageSelect({
   name: string;
 }): JSX.Element {
   return (
-    <FormField id={id} label="Language" required className="flex-1">
-      <select id={id} name={name} className="rounded border-gray-400" required>
+    <FormField id={id} label="Reply language" className="flex-1">
+      <select id={id} name={name} className="rounded border-gray-400">
         {langs.map((lang) => (
           <option key={lang.code} value={lang.code}>
             {lang.flag} {lang.name}

@@ -37,3 +37,15 @@ function generateClassName(props: ButtonProps) {
       : "bg-transparent text-green-800"
   );
 }
+
+export function TextButton(props: React.ComponentPropsWithoutRef<"button">) {
+  return (
+    <button
+      {...props}
+      className={clsx(
+        props.className,
+        "flex justify-end items-center text-green-600 hover:text-green-500 active:text-green-700 "
+      )}
+    />
+  );
+}

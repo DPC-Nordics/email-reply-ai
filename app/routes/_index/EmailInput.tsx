@@ -1,16 +1,30 @@
 import clsx from "clsx";
-import { useRef, useState } from "react";
-import Button from "~/components/Button";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { TextButton } from "~/components/Button";
+import CopyIcon from "~/components/CopyIcon";
 import FormField from "~/components/FormField";
 
-export default function EmailInput({ id, name }: { id: string; name: string }) {
+type EmailInputProps = {
+  id: string;
+  name: string;
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  minLength?: number;
+  maxLength?: number;
+};
+
+function EmailInput(
+  { id, name, onChange, minLength = 10, maxLength = 1000 }: EmailInputProps,
+  ref: React.ForwardedRef<{ click: () => void }>
+): JSX.Element {
   const [isDragOver, setIsDragOver] = useState(false);
+  const [charCount, setCharCount] = useState(0);
+
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleButtonClick = () => {
-    inputRef.current?.click();
-  };
+  useImperativeHandle(ref, () => ({
+    click: () => inputRef.current?.click(),
+  }));
 
   const clearFileInput = () => {
     if (inputRef.current) inputRef.current.value = "";
@@ -47,6 +61,22 @@ export default function EmailInput({ id, name }: { id: string; name: string }) {
       .finally(() => setIsDragOver(false));
   };
 
+  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    onChange?.(event);
+    const value = event.target.value || "";
+    setCharCount(value.length);
+  };
+
+  const handlePasteText = async () => {
+    if (!textAreaRef.current) return;
+    try {
+      const text = await navigator.clipboard.readText();
+      textAreaRef.current.value = text;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <FormField
       id={id}
@@ -59,23 +89,26 @@ export default function EmailInput({ id, name }: { id: string; name: string }) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragExit}
       onDrop={handleFileDrop}
+      helpText={`${charCount} / ${maxLength} (min. ${minLength})`}
+      action={
+        <TextButton onClick={handlePasteText}>
+          Paste <CopyIcon />
+        </TextButton>
+      }
     >
-      <div className="flex gap-2">
-        <Button className={"w-full"} onClick={handleButtonClick}>
-          Drag or Upload text file
-        </Button>
-        <Button type="reset">Reset</Button>
-      </div>
-
       <textarea
         id={id}
         ref={textAreaRef}
         name={name}
-        className="w-full h-80 p-2 border border-gray-400 rounded-md resize-y"
-        placeholder="Or type your email here..."
+        className={clsx(
+          "w-full h-80 p-2 border border-gray-400 rounded-md resize-y"
+        )}
+        placeholder="Drag your file or type your email here..."
         required
+        onChange={handleTextChange}
+        minLength={minLength}
+        maxLength={maxLength}
       />
-
       <input
         ref={inputRef}
         type="file"
@@ -86,3 +119,5 @@ export default function EmailInput({ id, name }: { id: string; name: string }) {
     </FormField>
   );
 }
+
+export default forwardRef(EmailInput);

@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import FormField from "~/components/FormField";
 
 export default function PasswordInput({
@@ -10,10 +11,10 @@ export default function PasswordInput({
   return (
     <FormField
       id={id}
-      label="Password"
+      label="Passcode"
       required
       helpText="4 digit code"
-      className="flex-1"
+      className="!w-28"
     >
       <input
         id={id}
@@ -22,6 +23,10 @@ export default function PasswordInput({
         required
         maxLength={4}
         pattern="[0-9]{4}"
+        className={clsx(
+          "!w-full rounded-md text-center text-3xl p-0 h-[42px] border-gray-400",
+          "invalid:ring-2 invalid:ring-red-500 invalid:bg-red-50"
+        )}
       />
     </FormField>
   );
