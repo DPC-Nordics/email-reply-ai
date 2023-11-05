@@ -1,0 +1,55 @@
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+# https://learn.microsoft.com/en-gb/azure/app-service/deploy-azure-pipelines?view=azure-devops&tabs=yaml
+
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "18.x"
+    displayName: "Install Node.js"
+
+  - task: Cache@2
+    inputs:
+      key: '"yarn" | "$(Agent.OS)"'
+      restoreKeys: |
+        "yarn" | "$(Agent.OS)"
+        "yarn"
+      path: "$(System.DefaultWorkingDirectory)/node_modules"
+    displayName: Cache Yarn packages
+
+  - script: |
+      yarn install --immutable
+    displayName: "Install deps"
+
+  - script: |
+      yarn typecheck
+    displayName: "Test app"
+
+  - script: |
+      yarn build
+    displayName: "Build app"
+
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+      includeRootFolder: false
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
+      publishLocation: "pipeline"
+      artifact: "email-ai-fe"
+
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: "60227401-6dbb-4ad5-8508-8763b6d3faff"
+      appType: "webAppLinux"
+      appName: "EmailReplyWebApp"
+      package: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
+      runtimeStack: "NODE|18"
+      startUpCommand: "yarn start"
