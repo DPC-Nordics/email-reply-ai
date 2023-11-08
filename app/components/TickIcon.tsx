@@ -10,9 +10,9 @@ export default function TickIcon(): JSX.Element {
       <path
         d="M5.5 12.5L10.167 17L19.5 8"
         stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

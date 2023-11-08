@@ -64,7 +64,7 @@ function CopyButton({ value }: { value: string }) {
   const [copy, isCopied] = useCopy();
 
   return (
-    <TextButton disabled={isCopied} onClick={() => copy(value)}>
+    <TextButton type="button" disabled={isCopied} onClick={() => copy(value)}>
       {isCopied ? (
         <>
           Copied <TickIcon />

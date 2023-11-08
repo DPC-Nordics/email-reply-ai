@@ -91,7 +91,7 @@ function EmailInput(
       onDrop={handleFileDrop}
       helpText={`${charCount} / ${maxLength} (min. ${minLength})`}
       action={
-        <TextButton onClick={handlePasteText}>
+        <TextButton type="button" onClick={handlePasteText}>
           Paste <CopyIcon />
         </TextButton>
       }
