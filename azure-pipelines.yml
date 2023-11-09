@@ -52,4 +52,4 @@ steps:
       appName: "EmailReplyWebApp"
       package: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
       runtimeStack: "NODE|18"
-      startUpCommand: "yarn start"
+      startUpCommand: "yarn remix-serve ./build/index.js"
